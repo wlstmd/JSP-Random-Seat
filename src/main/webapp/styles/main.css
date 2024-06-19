@@ -1,0 +1,111 @@
+@font-face {
+  font-family: 'YEONGJUPunggiGinsengTTF';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2310@1.0/YEONGJUPunggiGinsengTTF.woff2') format('woff2');
+  font-weight: normal;
+  font-style: normal;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: #F0E9E9;
+}
+
+#header {
+  width: 100%;
+  height: 80px;
+  background-color: #D4F4FE;
+}
+
+#header img {
+  width: 50px;
+  margin-left: 50px;
+  margin-right: 10px;
+  margin-top: 10px;
+}
+
+#main {
+  display: flex;
+}
+
+#sim {
+  height: 200px;
+  position: absolute;
+  margin-left: 380px;
+  animation: ani 1.5s infinite;
+}
+
+@keyframes ani {
+  0% {
+    margin-top: 100px;
+  }
+
+  50% {
+    margin-top: 110px;
+  }
+
+  100% {
+    margin-top: 100px;
+  }
+}
+
+#desk {
+  height: 550px;
+  margin-left: 200px;
+  margin-top: 150px;
+}
+
+#main>div {
+  height: 200px;
+  margin-left: 130px;
+  margin-top: 270px;
+}
+
+#main>div>div {
+  display: flex;
+}
+
+a {
+  text-align: center;
+  text-decoration: none;
+  color: #D9AC57;
+  font-family: 'YEONGJUPunggiGinsengTTF';
+  font-size: 20px;
+}
+
+a>div {
+  width: 250px;
+  height: 50px;
+  border: 4px solid #D9AC57;
+  border-radius: 20px;
+  margin-top: 40px;
+  transition: 0.2s;
+}
+
+a>div:hover {
+  background-color: #ded7d7;
+  transition: 0.2s;
+}
+
+#s {
+  margin-right: 40px;
+}
+
+a>div>p {
+  margin-top: 15px;
+}
+
+h1 {
+  font-family: 'YEONGJUPunggiGinsengTTF';
+  text-align: center;
+  font-size: 60px;
+}
+
+h2 {
+  display: inline-block;
+  font-family: 'YEONGJUPunggiGinsengTTF';
+  font-size: 35px;
+}
