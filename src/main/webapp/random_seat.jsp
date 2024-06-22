@@ -1,31 +1,32 @@
-<%@ page import="java.util.ArrayList"%>
-<%@ page import="java.util.Collections"%>
-<%@ page import="java.util.List"%>
-<%@ page import="java.util.HashSet"%>
+<%@ page import="java.sql.*"%>
+<%@ page import="java.util.*"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 
 <%!
-    private List<String> friendsNames = new ArrayList<>();
+    private Connection getConnection() throws SQLException {
+        String url = "jdbc:mysql://localhost:3306/students";
+        String user = "root";
+        String password = "jin009787~";
+        return DriverManager.getConnection(url, user, password);
+    }
 
-	public void jspInit() {
-	    List<String> uniqueNames = new ArrayList<>();
-	    for (int i = 1; i <= 19; i++) {
-	        uniqueNames.add(String.valueOf(i));
-	    }
-	    Collections.shuffle(uniqueNames);
-	    friendsNames = uniqueNames;
-	}
-
-%>
-
-<%!
-    public List<String> getFriendsNames() {
-        return friendsNames;
+    private List<String> getFriendsNames() {
+        List<String> names = new ArrayList<>();
+        try (Connection conn = getConnection();
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery("SELECT name FROM students")) {
+            while (rs.next()) {
+                names.add(rs.getString("name"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        Collections.shuffle(names);
+        return names;
     }
 %>
 
 <%
-    jspInit();
     List<String> friendsNames = getFriendsNames();
 %>
 
@@ -36,6 +37,51 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Random_SeatV2</title>
     <link rel="stylesheet" href="./styles/app.css">
+    <style>
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.4);
+        }
+        .modal-content {
+            text-align: center;
+            background-color: #fefefe;
+            margin: 15% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 50%;
+            border-radius: 40px;
+            position: relative;
+        }
+        .modal-content input {
+        		border-radius: 40px;
+        		box-shadow: 2px 2px 2px grey;
+        		border: none;
+        		padding: 10px;
+        		margin: 5px
+        }
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            position: absolute;
+            top: 10px;
+            right: 20px;
+        }
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+    </style>
 </head>
 <body>
     <div id="header">
@@ -98,14 +144,31 @@
     </div>
     <div id="button">
         <button id="pickRandomStudent">한명씩 뽑기</button>
-        <button onClick="window.location.reload()">초기화</button>
+        <button id="resetButton">초기화</button>
+    </div>
+
+    <div id="nameInputModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>19명의 이름을 입력해주세요</h2>
+            <form id="nameInputForm">
+                <% for (int i = 1; i <= 19; i++) { %>
+                    <input type="text" name="name<%= i %>" placeholder="이름 <%= i %>"><br>
+                <% } %>
+                <button type="submit">제출</button>
+            </form>
+        </div>
     </div>
 
     <script>
         const tables = document.querySelectorAll('.table1, .table2, .table3, .table4, .table5, .table6');
         const pickRandomStudentButton = document.getElementById('pickRandomStudent');
+        const resetButton = document.getElementById('resetButton');
+        const modal = document.getElementById('nameInputModal');
+        const nameInputForm = document.getElementById('nameInputForm');
+        const closeBtn = document.querySelector('.close');
 
-        const students = [
+        let students = [
             <% for (String name : friendsNames) { %>
             '<%= name %>',
             <% } %>
@@ -121,10 +184,60 @@
             }
         }
 
-        // Shuffle the students array to randomize the order
-        shuffleArray(students);
+        function showModal() {
+            modal.style.display = "block";
+        }
+
+        function hideModal() {
+            modal.style.display = "none";
+        }
+
+        function resetStudents() {
+            students = [];
+            tables.forEach(table => {
+                table.textContent = '';
+                table.style.backgroundColor = '';
+            });
+            selectedTable1 = null;
+            selectedTable2 = null;
+        }
+
+        window.onload = function() {
+            showModal();
+        }
+
+        resetButton.addEventListener('click', function() {
+            resetStudents();
+            showModal();
+        });
+
+        closeBtn.addEventListener('click', hideModal);
+
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                hideModal();
+            }
+        }
+
+        nameInputForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const formData = new FormData(nameInputForm);
+            students = [];
+            for (let pair of formData.entries()) {
+                if (pair[1].trim() !== '') {
+                    students.push(pair[1].trim());
+                }
+            }
+            hideModal();
+            shuffleArray(students);
+        });
 
         pickRandomStudentButton.addEventListener('click', function () {
+            if (students.length === 0) {
+                alert("19명의 이름을 모두 입력해주세요.");
+                showModal();
+                return;
+            }
             if (students.length > 0) {
                 for (let i = 0; i < tables.length; i++) {
                     if (tables[i].textContent === '') {
@@ -135,7 +248,6 @@
             }
         });
 
-        // 테이블 클릭 시 교환 기능
         tables.forEach(table => {
             table.addEventListener('click', () => {
                 if (!selectedTable1) {
