@@ -35,7 +35,7 @@ try {
 try (Connection conn = DriverManager.getConnection(url, user, password)) {
     // 기존 데이터 삭제
     try (Statement stmt = conn.createStatement()) {
-        stmt.executeUpdate("DELETE FROM students");
+        stmt.executeUpdate("TRUNCATE TABLE students;");
     }
 
     // 새 데이터 삽입

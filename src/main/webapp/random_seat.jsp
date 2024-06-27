@@ -60,11 +60,11 @@
             position: relative;
         }
         .modal-content input {
-        		border-radius: 40px;
-        		box-shadow: 2px 2px 2px grey;
-        		border: none;
-        		padding: 10px;
-        		margin: 5px
+            border-radius: 40px;
+            box-shadow: 2px 2px 2px grey;
+            border: none;
+            padding: 10px;
+            margin: 5px
         }
         .close {
             color: #aaa;
@@ -80,6 +80,26 @@
             color: black;
             text-decoration: none;
             cursor: pointer;
+        }
+        #main {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+        .column {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .table {
+            width: 100px;
+            height: 60px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+		  	background-color: rgb(219, 167, 98);
+		  	border: 2px solid black;
         }
     </style>
 </head>
@@ -98,48 +118,34 @@
         </div>
     </div>
     <div id="main">
-        <div id="left">
-            <span>
-                <div class="table1" id="table1-0"></div>
-                <div class="table1 table2" id="table1-1"></div>
-            </span>
-            <span>
-                <div class="table1" id="table1-2"></div>
-                <div class="table1 table2" id="table1-3"></div>
-            </span>
-            <span>
-                <div class="table1" id="table1-4"></div>
-                <div class="table1 table2" id="table1-5"></div>
-            </span>
+        <div class="column">
+            <div class="table"></div>
+            <div class="table"></div>
+            <div class="table"></div>
+            <div class="table"></div>
         </div>
-        <div id="center">
-            <span>
-                <div class="table3 table_center" id="table3-0"></div>
-                <div class="table3 table4" id="table3-1"></div>
-            </span>
-            <span class="">
-                <div class="table3 table_center" id="table3-2"></div>
-                <div class="table3 table4" id="table3-3"></div>
-            </span>
-            <span class="">
-                <div class="table3" id="table3-4"></div>
-                <div class="table3 table4" id="table3-5"></div>
-                <div class="table3 table4" id="table3-6"></div>
-            </span>
+        <div class="column">
+            <div class="table"></div>
+            <div class="table"></div>
+            <div class="table"></div>
+            <div class="table"></div>
         </div>
-        <div id="right">
-            <span>
-                <div class="table5 table6" id="table5-0"></div>
-                <div class="table5" id="table5-1"></div>
-            </span>
-            <span>
-                <div class="table5 table6" id="table5-2"></div>
-                <div class="table5" id="table5-3"></div>
-            </span>
-            <span>
-                <div class="table5 table6" id="table5-4"></div>
-                <div class="table5" id="table5-5"></div>
-            </span>
+        <div class="column">
+            <div class="table"></div>
+            <div class="table"></div>
+            <div class="table"></div>
+            <div class="table"></div>
+        </div>
+        <div class="column">
+            <div class="table"></div>
+            <div class="table"></div>
+            <div class="table"></div>
+            <div class="table"></div>
+        </div>
+        <div class="column">
+            <div class="table"></div>
+            <div class="table"></div>
+            <div class="table"></div>
         </div>
     </div>
     <div id="button">
@@ -161,7 +167,7 @@
     </div>
 
     <script>
-        const tables = document.querySelectorAll('.table1, .table2, .table3, .table4, .table5, .table6');
+        const tables = document.querySelectorAll('.table');
         const pickRandomStudentButton = document.getElementById('pickRandomStudent');
         const resetButton = document.getElementById('resetButton');
         const modal = document.getElementById('nameInputModal');
